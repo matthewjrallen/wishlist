@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="Wishlist" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="theme-color" content="#080f0a" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,257 +28,358 @@
             display: ['Playfair Display', 'serif'],
             body: ['DM Sans', 'sans-serif'],
           },
-          colors: {
-            ink: '#0a0a0a',
-            paper: '#f5f0eb',
-            accent: '#c8a96e',
-            muted: '#6b6560',
-          },
         },
       },
     };
   </script>
 
   <style>
-    * { -webkit-tap-highlight-color: transparent; }
-    body { font-family: 'DM Sans', sans-serif; background: #0a0a0a; color: #f5f0eb; }
-
-    .glass {
-      background: rgba(245,240,235,0.04);
-      border: 1px solid rgba(245,240,235,0.10);
-      backdrop-filter: blur(12px);
+    :root {
+      --accent:     #4ade80;
+      --accent-dim: rgba(74,222,128,0.12);
+      --accent-mid: rgba(74,222,128,0.25);
+      --bg:         #080f0a;
+      --surface:    #0d1a0f;
+      --paper:      #e8f0ea;
+      --muted:      #5a7060;
+      --border:     rgba(232,240,234,0.10);
     }
+
+    * { -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--paper);
+      min-height: 100vh;
+    }
+
+    #authScreen {
+      background:
+        radial-gradient(ellipse at 65% 0%,   #0d2b14 0%, transparent 55%),
+        radial-gradient(ellipse at 10% 90%,  #091a0c 0%, transparent 50%),
+        var(--bg);
+    }
+    #appScreen {
+      background:
+        radial-gradient(ellipse at 75% -5%, #0d2b14 0%, transparent 50%),
+        var(--bg);
+    }
+
+    /* Glass card */
+    .glass {
+      background: rgba(232,240,234,0.04);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    /* Accent divider */
     .accent-line {
       height: 1px;
-      background: linear-gradient(90deg, transparent, #c8a96e, transparent);
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.4;
     }
+
+    /* Inputs */
     input, textarea, select {
-      background: rgba(245,240,235,0.06) !important;
-      border: 1px solid rgba(245,240,235,0.15) !important;
-      color: #f5f0eb !important;
-      transition: border-color 0.2s;
+      background: rgba(232,240,234,0.05) !important;
+      border: 1px solid rgba(232,240,234,0.13) !important;
+      color: var(--paper) !important;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
     input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: #c8a96e !important;
+      outline: none !important;
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px rgba(74,222,128,0.08) !important;
     }
-    input::placeholder, textarea::placeholder { color: #6b6560; }
-    select option { background: #1a1a1a; }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    select option { background: #0f1f12; color: var(--paper); }
 
+    /* Buttons */
     .btn-primary {
-      background: #c8a96e;
-      color: #0a0a0a;
-      font-weight: 500;
-      transition: opacity 0.2s, transform 0.1s;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+      transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 0 22px rgba(74,222,128,0.18);
     }
-    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:hover  { opacity: 0.88; box-shadow: 0 0 32px rgba(74,222,128,0.30); }
     .btn-primary:active { transform: scale(0.97); }
+
     .btn-ghost {
-      border: 1px solid rgba(245,240,235,0.2);
-      color: #f5f0eb;
-      transition: border-color 0.2s;
+      border: 1px solid rgba(232,240,234,0.18);
+      color: var(--paper);
+      transition: border-color 0.2s, color 0.2s;
     }
-    .btn-ghost:hover { border-color: #c8a96e; }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
+    /* Item cards */
     .item-card {
-      background: rgba(245,240,235,0.04);
-      border: 1px solid rgba(245,240,235,0.08);
-      transition: border-color 0.2s, transform 0.2s;
+      background: rgba(232,240,234,0.025);
+      border: 1px solid rgba(232,240,234,0.07);
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
     }
-    .item-card:hover { border-color: rgba(200,169,110,0.4); transform: translateY(-1px); }
+    .item-card:hover {
+      border-color: var(--accent-mid);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(74,222,128,0.06);
+    }
 
+    /* Tags */
     .tag {
-      background: rgba(200,169,110,0.15);
-      border: 1px solid rgba(200,169,110,0.3);
-      color: #c8a96e;
-      font-size: 0.7rem;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-mid);
+      color: var(--accent);
+      font-size: 0.68rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
-    .slide-in { animation: slideIn 0.3s ease forwards; }
-    @keyframes slideIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    /* Animations */
+    .slide-in { animation: slideIn 0.28s ease forwards; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
+    /* Modal */
     .modal-overlay {
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(8px);
+      background: rgba(8,15,10,0.88);
+      backdrop-filter: blur(10px);
     }
     .modal-box {
-      background: #141414;
-      border: 1px solid rgba(245,240,235,0.12);
+      background: var(--surface);
+      border: 1px solid rgba(232,240,234,0.10);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(74,222,128,0.04);
     }
 
+    /* Spinner */
     .spinner {
       width: 18px; height: 18px;
-      border: 2px solid rgba(10,10,10,0.3);
-      border-top-color: #0a0a0a;
+      border: 2px solid rgba(8,15,10,0.25);
+      border-top-color: var(--bg);
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* Filter pills */
     .filter-pill {
-      border: 1px solid rgba(245,240,235,0.15);
-      color: #6b6560;
-      font-size: 0.75rem;
-      letter-spacing: 0.06em;
+      border: 1px solid rgba(232,240,234,0.13);
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
       transition: all 0.2s;
     }
     .filter-pill.active, .filter-pill:hover {
-      border-color: #c8a96e;
-      color: #c8a96e;
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-dim);
     }
 
-    #toast {
-      transition: opacity 0.3s, transform 0.3s;
+    /* Custom category row */
+    #customCatRow { display: none; }
+    #customCatRow.visible { display: flex; }
+
+    /* Glow dot */
+    .glow-dot {
+      display: inline-block;
+      width: 7px; height: 7px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent), 0 0 18px rgba(74,222,128,0.35);
+      margin-right: 8px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
     }
+
+    /* Toast */
+    #toast { transition: opacity 0.3s, transform 0.3s; }
   </style>
 </head>
-<body class="min-h-screen">
+<body>
 
-  <!-- AUTH SCREEN -->
+  <!-- ═══ AUTH SCREEN ════════════════════════════════════════════════════════ -->
   <div id="authScreen" class="min-h-screen flex flex-col items-center justify-center p-6">
     <div class="w-full max-w-sm">
+
       <div class="text-center mb-10">
-        <h1 class="font-display text-5xl mb-2 tracking-tight">Wishlist</h1>
-        <p class="text-muted text-sm">Your private collection</p>
+        <h1 class="font-display text-5xl mb-2 tracking-tight">
+          <span class="glow-dot"></span>Wishlist
+        </h1>
+        <p class="text-sm" style="color:var(--muted)">Your private collection</p>
         <div class="accent-line mt-4 mx-auto w-24"></div>
       </div>
 
       <div class="glass rounded-2xl p-6 space-y-4">
-        <!-- Tabs -->
-        <div class="flex rounded-xl overflow-hidden border border-white/10 mb-2">
+        <!-- Sign In / Register tabs -->
+        <div class="flex rounded-xl overflow-hidden" style="border:1px solid rgba(255,255,255,0.08)">
           <button id="tabLogin" onclick="switchTab('login')"
-            class="flex-1 py-2 text-sm font-medium transition-colors bg-white/8 text-paper">Sign In</button>
+            class="flex-1 py-2.5 text-sm font-medium transition-colors"
+            style="background:rgba(255,255,255,0.05);color:var(--paper)">Sign In</button>
           <button id="tabRegister" onclick="switchTab('register')"
-            class="flex-1 py-2 text-sm font-medium transition-colors text-muted">Register</button>
+            class="flex-1 py-2.5 text-sm font-medium transition-colors"
+            style="color:var(--muted)">Register</button>
         </div>
 
-        <div id="authError" class="text-red-400 text-xs text-center hidden"></div>
+        <div id="authError"
+          class="text-red-400 text-xs text-center hidden rounded-xl py-2.5 px-3"
+          style="background:rgba(248,113,113,0.08)"></div>
 
-        <input id="authEmail" type="email" placeholder="Email" class="w-full rounded-xl px-4 py-3 text-sm" />
+        <input id="authEmail"    type="email"    placeholder="Email"    class="w-full rounded-xl px-4 py-3 text-sm" />
         <input id="authPassword" type="password" placeholder="Password" class="w-full rounded-xl px-4 py-3 text-sm" />
 
-        <div id="masterPwSection" class="space-y-2">
-          <input id="masterPassword" type="password" placeholder="Master Password (for encryption)" class="w-full rounded-xl px-4 py-3 text-sm" />
-          <p class="text-muted text-xs leading-relaxed">This password encrypts your data client-side. It's <strong class="text-paper">never</strong> stored. Keep it safe.</p>
+        <div class="space-y-2">
+          <input id="masterPassword" type="password"
+            placeholder="Master Password (for encryption)"
+            class="w-full rounded-xl px-4 py-3 text-sm" />
+          <p class="text-xs leading-relaxed" style="color:var(--muted)">
+            Encrypts your data client-side.
+            <strong style="color:var(--paper)">Never</strong> stored — keep it safe.
+          </p>
         </div>
 
-        <button id="authBtn" onclick="handleAuth()" class="btn-primary w-full rounded-xl py-3 text-sm flex items-center justify-center gap-2">
+        <button id="authBtn" onclick="handleAuth()"
+          class="btn-primary w-full rounded-xl py-3 text-sm flex items-center justify-center gap-2">
           Sign In
         </button>
       </div>
 
-      <!-- Firebase config notice -->
-      <p class="text-muted text-xs text-center mt-6 leading-relaxed">
-        ⚙️ Paste your Firebase config in the <code class="text-accent">FIREBASE_CONFIG</code> section below
+      <p class="text-xs text-center mt-6 leading-relaxed" style="color:var(--muted)">
+        ⚙️ Paste your Firebase config in the
+        <code style="color:var(--accent)">FIREBASE_CONFIG</code> section below
       </p>
     </div>
   </div>
 
-  <!-- APP SCREEN -->
+  <!-- ═══ APP SCREEN ═════════════════════════════════════════════════════════ -->
   <div id="appScreen" class="hidden min-h-screen flex flex-col max-w-2xl mx-auto">
 
-    <!-- Header -->
     <header class="px-6 pt-14 pb-4 flex items-center justify-between">
       <div>
-        <h1 class="font-display text-3xl tracking-tight">Wishlist</h1>
-        <p id="itemCount" class="text-muted text-xs mt-0.5">0 items</p>
+        <h1 class="font-display text-3xl tracking-tight">
+          <span class="glow-dot"></span>Wishlist
+        </h1>
+        <p id="itemCount" class="text-xs mt-0.5 pl-4" style="color:var(--muted)">0 items</p>
       </div>
       <button onclick="signOut()" class="btn-ghost text-xs px-4 py-2 rounded-full">Sign out</button>
     </header>
 
     <div class="accent-line mx-6"></div>
 
-    <!-- Add item bar -->
-    <div class="px-6 pt-5 space-y-3">
-      <div class="flex gap-2">
-        <input id="urlInput" type="url" placeholder="Paste product URL…" class="flex-1 rounded-xl px-4 py-3 text-sm" />
-        <button onclick="fetchUrl()" id="fetchBtn" class="btn-primary px-4 rounded-xl text-sm whitespace-nowrap flex items-center gap-2">
-          Fetch
-        </button>
-      </div>
-      <button onclick="openModal()" class="btn-ghost w-full py-2.5 rounded-xl text-sm">
-        + Add manually
+    <!-- Add button -->
+    <div class="px-6 pt-5">
+      <button onclick="openModal()"
+        class="btn-primary w-full py-3 rounded-xl text-sm flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+          viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Add Item
       </button>
     </div>
 
-    <!-- Filters -->
-    <div id="filters" class="px-6 pt-4 flex flex-wrap gap-2 hidden">
-      <button onclick="setFilter('')" data-cat="" class="filter-pill active px-3 py-1 rounded-full">All</button>
-    </div>
+    <!-- Category filter pills -->
+    <div id="filters" class="px-6 pt-4 flex flex-wrap gap-2 hidden"></div>
 
     <!-- Items list -->
-    <main class="flex-1 px-6 pt-4 pb-24 space-y-3" id="itemsList">
-      <div id="emptyState" class="text-center py-16 text-muted">
+    <main id="itemsList" class="flex-1 px-6 pt-4 pb-28 space-y-3">
+      <div class="text-center py-16" style="color:var(--muted)">
         <div class="font-display text-6xl mb-3 opacity-20">✦</div>
         <p class="text-sm">Your wishlist is empty</p>
-        <p class="text-xs mt-1 opacity-60">Paste a URL above or add items manually</p>
+        <p class="text-xs mt-1 opacity-60">Tap Add Item to get started</p>
       </div>
     </main>
   </div>
 
-  <!-- ADD/EDIT MODAL -->
-  <div id="modal" class="fixed inset-0 modal-overlay z-50 hidden flex items-end sm:items-center justify-center p-4">
+  <!-- ═══ ADD / EDIT MODAL ═══════════════════════════════════════════════════ -->
+  <div id="modal"
+    class="fixed inset-0 modal-overlay z-50 hidden flex items-end sm:items-center justify-center p-4">
     <div class="modal-box rounded-2xl w-full max-w-md p-6 space-y-4 slide-in">
+
       <div class="flex items-center justify-between mb-1">
         <h2 id="modalTitle" class="font-display text-xl">Add Item</h2>
-        <button onclick="closeModal()" class="text-muted hover:text-paper text-2xl leading-none">&times;</button>
+        <button onclick="closeModal()"
+          class="text-2xl leading-none transition-colors"
+          style="color:var(--muted)"
+          onmouseover="this.style.color='var(--paper)'"
+          onmouseout="this.style.color='var(--muted)'">&times;</button>
       </div>
       <div class="accent-line"></div>
 
-      <input id="itemName" type="text" placeholder="Product name" class="w-full rounded-xl px-4 py-3 text-sm" />
-      <input id="itemUrl" type="url" placeholder="Product URL (optional)" class="w-full rounded-xl px-4 py-3 text-sm" />
+      <input id="itemName"     type="text" placeholder="Product name *"          class="w-full rounded-xl px-4 py-3 text-sm" />
+      <input id="itemUrl"      type="url"  placeholder="Product URL (optional)"  class="w-full rounded-xl px-4 py-3 text-sm" />
+
       <div class="flex gap-3">
-        <input id="itemPrice" type="text" placeholder="Price (e.g. 49.99)" class="flex-1 rounded-xl px-4 py-3 text-sm" />
-        <input id="itemCurrency" type="text" placeholder="GBP" value="GBP" class="w-20 rounded-xl px-3 py-3 text-sm text-center" />
+        <input id="itemPrice"    type="text" placeholder="Price (e.g. 49.99)"    class="flex-1 rounded-xl px-4 py-3 text-sm" />
+        <input id="itemCurrency" type="text" placeholder="GBP" value="GBP"       class="w-20 rounded-xl px-3 py-3 text-sm text-center" />
       </div>
-      <select id="itemCategory" class="w-full rounded-xl px-4 py-3 text-sm">
-        <option value="">Category…</option>
-        <option>Tech</option>
-        <option>Clothing</option>
-        <option>Home</option>
-        <option>Books</option>
-        <option>Beauty</option>
-        <option>Sports</option>
-        <option>Food</option>
-        <option>Other</option>
-      </select>
-      <textarea id="itemNotes" placeholder="Notes (optional)" rows="2" class="w-full rounded-xl px-4 py-3 text-sm resize-none"></textarea>
+
+      <!-- Category: preset dropdown + custom input -->
+      <div class="space-y-2">
+        <select id="itemCategory" onchange="handleCategoryChange()"
+          class="w-full rounded-xl px-4 py-3 text-sm">
+          <option value="">Category…</option>
+          <option>Tech</option>
+          <option>Clothing</option>
+          <option>Home</option>
+          <option>Books</option>
+          <option>Beauty</option>
+          <option>Sports</option>
+          <option>Food</option>
+          <option>Travel</option>
+          <option>Other</option>
+          <option value="__custom__">+ Custom category…</option>
+        </select>
+
+        <div id="customCatRow" class="flex gap-2">
+          <input id="customCatInput" type="text" placeholder="Enter category name"
+            class="flex-1 rounded-xl px-4 py-3 text-sm"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();confirmCustomCat();}" />
+          <button onclick="confirmCustomCat()"
+            class="btn-primary px-4 rounded-xl text-sm whitespace-nowrap">Add</button>
+        </div>
+      </div>
+
+      <textarea id="itemNotes" placeholder="Notes (optional)"
+        rows="2" class="w-full rounded-xl px-4 py-3 text-sm resize-none"></textarea>
 
       <input id="editingId" type="hidden" />
-      <button onclick="saveItem()" id="saveBtn" class="btn-primary w-full rounded-xl py-3 text-sm flex items-center justify-center gap-2">
+      <button onclick="saveItem()" id="saveBtn"
+        class="btn-primary w-full rounded-xl py-3 text-sm flex items-center justify-center gap-2">
         Save Item
       </button>
     </div>
   </div>
 
-  <!-- TOAST -->
-  <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-paper text-ink text-xs font-medium px-5 py-3 rounded-full shadow-xl opacity-0 pointer-events-none z-50">
+  <!-- ═══ TOAST ═════════════════════════════════════════════════════════════ -->
+  <div id="toast"
+    class="fixed bottom-8 left-1/2 -translate-x-1/2 text-xs font-semibold px-5 py-3 rounded-full shadow-2xl opacity-0 pointer-events-none z-50 whitespace-nowrap"
+    style="background:var(--accent);color:var(--bg)">
     Saved!
   </div>
 
-  <!-- ═══════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════════════════
        FIREBASE CONFIG — PASTE YOUR KEYS HERE
-       ═══════════════════════════════════════════ -->
+       ═══════════════════════════════════════════════════════════════════════ -->
   <script type="module">
     // 1. Go to https://console.firebase.google.com
     // 2. Create a project → Add web app → copy the config object
-    // 3. Replace the values below with your own
-    // 4. In Firebase console: enable Email/Password auth + Firestore
-    // 5. Set Firestore rules (see README / instructions at bottom of file)
+    // 3. Replace the placeholder values below
+    // 4. Enable Email/Password auth + Firestore in the Firebase console
 
-    const FIREBASE_CONFIG = {
-      apiKey: "AIzaSyBSzSThI6G_CAMUeBay_SuEXGtFt4wSsmg",
-      authDomain: "wishlist-71248.firebaseapp.com",
-      projectId: "wishlist-71248",
-      storageBucket: "wishlist-71248.firebasestorage.app",
-      messagingSenderId: "232743351369",
-      appId: "1:232743351369:web:7e10b547cfed05c1c4fb98",
-      measurementId: "G-1KTEPRD1FL"
-    };
+   	const FIREBASE_CONFIG = {
+		apiKey: "AIzaSyBSzSThI6G_CAMUeBay_SuEXGtFt4wSsmg",
+		authDomain: "wishlist-71248.firebaseapp.com",
+		projectId: "wishlist-71248",
+		storageBucket: "wishlist-71248.firebasestorage.app",
+		messagingSenderId: "232743351369",
+		appId: "1:232743351369:web:7e10b547cfed05c1c4fb98",
+		measurementId: "G-1KTEPRD1FL"
+	};
 
-    // ═══════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════════════════════
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
@@ -286,24 +387,25 @@
       signOut as fbSignOut, onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import {
-      getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, query, where, orderBy
+      getFirestore, collection, addDoc, getDocs,
+      doc, deleteDoc, updateDoc, query, where
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const app  = initializeApp(FIREBASE_CONFIG);
     const auth = getAuth(app);
     const db   = getFirestore(app);
 
-    // ─── Crypto helpers (AES-GCM via Web Crypto API) ───────────────────────
+    // ─── Web Crypto helpers (AES-256-GCM) ────────────────────────────────────
     let cryptoKey = null;
 
     async function deriveKey(masterPassword, uid) {
       const enc = new TextEncoder();
-      const keyMaterial = await crypto.subtle.importKey(
+      const raw = await crypto.subtle.importKey(
         "raw", enc.encode(masterPassword), "PBKDF2", false, ["deriveKey"]
       );
       return crypto.subtle.deriveKey(
         { name: "PBKDF2", salt: enc.encode(uid), iterations: 200000, hash: "SHA-256" },
-        keyMaterial,
+        raw,
         { name: "AES-GCM", length: 256 },
         false, ["encrypt", "decrypt"]
       );
@@ -314,31 +416,34 @@
       const enc = new TextEncoder();
       const iv  = crypto.getRandomValues(new Uint8Array(12));
       const buf = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, cryptoKey, enc.encode(text));
-      const combined = new Uint8Array(iv.byteLength + buf.byteLength);
-      combined.set(iv); combined.set(new Uint8Array(buf), iv.byteLength);
-      return btoa(String.fromCharCode(...combined));
+      const out = new Uint8Array(12 + buf.byteLength);
+      out.set(iv); out.set(new Uint8Array(buf), 12);
+      return btoa(String.fromCharCode(...out));
     }
 
     async function decrypt(b64) {
       if (!cryptoKey || !b64) return b64;
       try {
         const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-        const iv  = bytes.slice(0, 12);
-        const buf = bytes.slice(12);
-        const dec = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, cryptoKey, buf);
+        const dec   = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: bytes.slice(0, 12) }, cryptoKey, bytes.slice(12)
+        );
         return new TextDecoder().decode(dec);
       } catch { return "[decryption failed — wrong master password?]"; }
     }
 
-    // ─── Auth ───────────────────────────────────────────────────────────────
+    // ─── Auth ─────────────────────────────────────────────────────────────────
     let currentUser = null;
 
     window.switchTab = (tab) => {
       const isLogin = tab === 'login';
-      document.getElementById('tabLogin').className    = `flex-1 py-2 text-sm font-medium transition-colors ${isLogin ? 'bg-white/8 text-paper' : 'text-muted'}`;
-      document.getElementById('tabRegister').className = `flex-1 py-2 text-sm font-medium transition-colors ${!isLogin ? 'bg-white/8 text-paper' : 'text-muted'}`;
-      document.getElementById('authBtn').textContent   = isLogin ? 'Sign In' : 'Create Account';
-      document.getElementById('masterPwSection').style.display = isLogin ? '' : '';
+      const tl = document.getElementById('tabLogin');
+      const tr = document.getElementById('tabRegister');
+      tl.style.color      = isLogin  ? 'var(--paper)' : 'var(--muted)';
+      tr.style.color      = !isLogin ? 'var(--paper)' : 'var(--muted)';
+      tl.style.background = isLogin  ? 'rgba(255,255,255,0.05)' : '';
+      tr.style.background = !isLogin ? 'rgba(255,255,255,0.05)' : '';
+      document.getElementById('authBtn').textContent = isLogin ? 'Sign In' : 'Create Account';
     };
 
     window.handleAuth = async () => {
@@ -347,28 +452,29 @@
       const master = document.getElementById('masterPassword').value;
       const errEl  = document.getElementById('authError');
       const btn    = document.getElementById('authBtn');
-      const isLogin = document.getElementById('tabLogin').classList.contains('text-paper');
+      const isLogin = btn.textContent.trim() === 'Sign In';
 
       errEl.classList.add('hidden');
-      if (!master) { errEl.textContent = 'Master password is required.'; errEl.classList.remove('hidden'); return; }
+      if (!master) {
+        errEl.textContent = 'Master password is required.';
+        errEl.classList.remove('hidden');
+        return;
+      }
 
       btn.innerHTML = '<div class="spinner"></div>';
       btn.disabled  = true;
 
       try {
-        let cred;
-        if (isLogin) {
-          cred = await signInWithEmailAndPassword(auth, email, pw);
-        } else {
-          cred = await createUserWithEmailAndPassword(auth, email, pw);
-        }
+        const cred = isLogin
+          ? await signInWithEmailAndPassword(auth, email, pw)
+          : await createUserWithEmailAndPassword(auth, email, pw);
         cryptoKey = await deriveKey(master, cred.user.uid);
       } catch (e) {
-        errEl.textContent = e.message.replace('Firebase: ', '');
+        errEl.textContent = e.message.replace('Firebase: ','').replace(/\(auth\/.*?\)\.?/,'').trim();
         errEl.classList.remove('hidden');
       } finally {
-        btn.innerHTML = isLogin ? 'Sign In' : 'Create Account';
-        btn.disabled  = false;
+        btn.textContent = isLogin ? 'Sign In' : 'Create Account';
+        btn.disabled = false;
       }
     };
 
@@ -379,69 +485,66 @@
 
     onAuthStateChanged(auth, user => {
       currentUser = user;
-      if (user) {
-        document.getElementById('authScreen').classList.add('hidden');
-        document.getElementById('appScreen').classList.remove('hidden');
-        loadItems();
-      } else {
-        document.getElementById('authScreen').classList.remove('hidden');
-        document.getElementById('appScreen').classList.add('hidden');
-        document.getElementById('itemsList').innerHTML = '<div id="emptyState" class="text-center py-16 text-muted"><div class="font-display text-6xl mb-3 opacity-20">✦</div><p class="text-sm">Your wishlist is empty</p></div>';
-      }
+      document.getElementById('authScreen').classList.toggle('hidden',  !!user);
+      document.getElementById('appScreen').classList.toggle('hidden',   !user);
+      if (user) loadItems();
     });
 
-    // ─── URL Fetching ────────────────────────────────────────────────────────
-    window.fetchUrl = async () => {
-      const url = document.getElementById('urlInput').value.trim();
-      if (!url) return;
-      const btn = document.getElementById('fetchBtn');
-      btn.innerHTML = '<div class="spinner" style="border-top-color:#0a0a0a;border-color:rgba(10,10,10,0.25)"></div>';
-      btn.disabled = true;
+    // ─── Custom category management ───────────────────────────────────────────
+    const sessionCustomCats = new Set();
 
-      try {
-        const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-        const res   = await fetch(proxy);
-        const json  = await res.json();
-        const html  = json.contents || '';
-        const parser = new DOMParser();
-        const doc2   = parser.parseFromString(html, 'text/html');
-
-        const getMeta = (names) => {
-          for (const n of names) {
-            const el = doc2.querySelector(`meta[property="${n}"], meta[name="${n}"]`);
-            if (el) return el.getAttribute('content') || '';
-          }
-          return '';
-        };
-
-        const name  = getMeta(['og:title','twitter:title']) || doc2.title || '';
-        const price = getMeta(['og:price:amount','product:price:amount','price']) || '';
-        const currency = getMeta(['og:price:currency','product:price:currency']) || 'GBP';
-        const image = getMeta(['og:image','twitter:image']) || '';
-
-        openModal({ name, url, price, currency, image });
-      } catch (e) {
-        showToast('Could not fetch URL — try manually', true);
-        openModal({ url });
-      } finally {
-        btn.innerHTML = 'Fetch';
-        btn.disabled  = false;
-        document.getElementById('urlInput').value = '';
+    window.handleCategoryChange = () => {
+      const sel = document.getElementById('itemCategory');
+      const row = document.getElementById('customCatRow');
+      if (sel.value === '__custom__') {
+        row.classList.add('visible');
+        document.getElementById('customCatInput').focus();
+      } else {
+        row.classList.remove('visible');
       }
     };
 
-    // ─── Modal ───────────────────────────────────────────────────────────────
+    window.confirmCustomCat = () => {
+      const input = document.getElementById('customCatInput');
+      const val   = input.value.trim();
+      if (!val) { input.focus(); return; }
+      addCustomCatToDropdown(val);
+      document.getElementById('itemCategory').value = val;
+      input.value = '';
+      document.getElementById('customCatRow').classList.remove('visible');
+    };
+
+    function addCustomCatToDropdown(val) {
+      if (sessionCustomCats.has(val)) return;
+      sessionCustomCats.add(val);
+      const sel    = document.getElementById('itemCategory');
+      const exists = [...sel.options].some(o => o.value === val);
+      if (!exists) {
+        const opt    = new Option(val, val);
+        const anchor = sel.querySelector('option[value="__custom__"]');
+        sel.insertBefore(opt, anchor);
+      }
+    }
+
+    // ─── Modal ────────────────────────────────────────────────────────────────
     window.openModal = (prefill = {}) => {
-      document.getElementById('modalTitle').textContent = prefill.editId ? 'Edit Item' : 'Add Item';
-      document.getElementById('itemName').value     = prefill.name     || '';
-      document.getElementById('itemUrl').value      = prefill.url      || '';
-      document.getElementById('itemPrice').value    = prefill.price    || '';
-      document.getElementById('itemCurrency').value = prefill.currency || 'GBP';
-      document.getElementById('itemCategory').value = prefill.category || '';
-      document.getElementById('itemNotes').value    = prefill.notes    || '';
-      document.getElementById('editingId').value    = prefill.editId   || '';
-      document.getElementById('saveBtn').textContent = prefill.editId ? 'Update Item' : 'Save Item';
+      document.getElementById('modalTitle').textContent      = prefill.editId ? 'Edit Item' : 'Add Item';
+      document.getElementById('itemName').value              = prefill.name     || '';
+      document.getElementById('itemUrl').value               = prefill.url      || '';
+      document.getElementById('itemPrice').value             = prefill.price    || '';
+      document.getElementById('itemCurrency').value          = prefill.currency || 'GBP';
+      document.getElementById('itemNotes').value             = prefill.notes    || '';
+      document.getElementById('editingId').value             = prefill.editId   || '';
+      document.getElementById('saveBtn').textContent         = prefill.editId ? 'Update Item' : 'Save Item';
+      document.getElementById('customCatRow').classList.remove('visible');
+
+      const sel = document.getElementById('itemCategory');
+      const cat = prefill.category || '';
+      if (cat) addCustomCatToDropdown(cat);
+      sel.value = cat;
+
       document.getElementById('modal').classList.remove('hidden');
+      document.getElementById('itemName').focus();
     };
 
     window.closeModal = () => document.getElementById('modal').classList.add('hidden');
@@ -450,28 +553,31 @@
       if (e.target === document.getElementById('modal')) closeModal();
     });
 
-    // ─── CRUD ────────────────────────────────────────────────────────────────
+    // ─── Save ─────────────────────────────────────────────────────────────────
     window.saveItem = async () => {
-      const name     = document.getElementById('itemName').value.trim();
-      const url      = document.getElementById('itemUrl').value.trim();
-      const price    = document.getElementById('itemPrice').value.trim();
-      const currency = document.getElementById('itemCurrency').value.trim() || 'GBP';
-      const category = document.getElementById('itemCategory').value;
-      const notes    = document.getElementById('itemNotes').value.trim();
+      const name      = document.getElementById('itemName').value.trim();
+      const url       = document.getElementById('itemUrl').value.trim();
+      const price     = document.getElementById('itemPrice').value.trim();
+      const currency  = document.getElementById('itemCurrency').value.trim() || 'GBP';
+      const notes     = document.getElementById('itemNotes').value.trim();
       const editingId = document.getElementById('editingId').value;
+
+      let category = document.getElementById('itemCategory').value;
+      if (category === '__custom__') {
+        category = document.getElementById('customCatInput').value.trim();
+        if (!category) { showToast('Enter a category name first', true); return; }
+      }
 
       if (!name) { showToast('Name is required', true); return; }
 
       const btn = document.getElementById('saveBtn');
-      btn.innerHTML = '<div class="spinner" style="border-top-color:#0a0a0a;border-color:rgba(10,10,10,0.25)"></div>';
-      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner" style="border-top-color:var(--bg);border-color:rgba(8,15,10,0.2)"></div>';
+      btn.disabled  = true;
 
       try {
-        const encName = await encrypt(name);
-        const encUrl  = await encrypt(url);
-
         const payload = {
-          encName, encUrl,
+          encName: await encrypt(name),
+          encUrl:  await encrypt(url),
           price, currency, category, notes,
           uid: currentUser.uid,
           updatedAt: Date.now(),
@@ -491,44 +597,49 @@
         showToast('Error: ' + e.message, true);
       } finally {
         btn.textContent = editingId ? 'Update Item' : 'Save Item';
-        btn.disabled = false;
+        btn.disabled    = false;
       }
     };
 
-    let allItems = [];
+    // ─── Load & render ────────────────────────────────────────────────────────
+    let allItems     = [];
     let activeFilter = '';
 
     window.setFilter = (cat) => {
       activeFilter = cat;
-      document.querySelectorAll('.filter-pill').forEach(p => {
-        p.classList.toggle('active', p.dataset.cat === cat);
-      });
+      document.querySelectorAll('.filter-pill').forEach(p =>
+        p.classList.toggle('active', p.dataset.cat === cat)
+      );
       renderItems();
     };
 
     async function loadItems() {
       if (!currentUser) return;
       try {
-        const q = query(
-          collection(db, 'items'),
-          where('uid', '==', currentUser.uid),
-          orderBy('createdAt', 'desc')
+        const snap = await getDocs(
+          query(collection(db, 'items'), where('uid', '==', currentUser.uid))
         );
-        const snap = await getDocs(q);
-        const promises = snap.docs.map(async d => {
+        const raw = await Promise.all(snap.docs.map(async d => {
           const data = d.data();
           return {
-            id: d.id,
-            name: await decrypt(data.encName),
-            url: await decrypt(data.encUrl),
-            price: data.price,
-            currency: data.currency,
-            category: data.category,
-            notes: data.notes,
-            createdAt: data.createdAt,
+            id:        d.id,
+            name:      await decrypt(data.encName),
+            url:       await decrypt(data.encUrl),
+            price:     data.price,
+            currency:  data.currency,
+            category:  data.category,
+            notes:     data.notes,
+            createdAt: data.createdAt || 0,
           };
+        }));
+        allItems = raw.sort((a, b) => b.createdAt - a.createdAt);
+
+        // Sync any custom categories from Firestore into the dropdown
+        const preset = new Set(['Tech','Clothing','Home','Books','Beauty','Sports','Food','Travel','Other','']);
+        allItems.forEach(item => {
+          if (item.category && !preset.has(item.category)) addCustomCatToDropdown(item.category);
         });
-        allItems = await Promise.all(promises);
+
         renderFilters();
         renderItems();
       } catch(e) {
@@ -537,32 +648,36 @@
     }
 
     function renderFilters() {
-      const cats = [...new Set(allItems.map(i => i.category).filter(Boolean))];
+      const cats      = [...new Set(allItems.map(i => i.category).filter(Boolean))];
       const container = document.getElementById('filters');
-      if (cats.length === 0) { container.classList.add('hidden'); return; }
+      if (!cats.length) { container.classList.add('hidden'); return; }
       container.classList.remove('hidden');
-      container.innerHTML = `<button onclick="setFilter('')" data-cat="" class="filter-pill ${activeFilter===''?'active':''} px-3 py-1 rounded-full">All</button>`;
+      container.innerHTML =
+        `<button onclick="setFilter('')" data-cat="" class="filter-pill ${activeFilter===''?'active':''} px-3 py-1.5 rounded-full">All</button>`;
       cats.forEach(c => {
-        const btn = document.createElement('button');
-        btn.onclick = () => setFilter(c);
+        const btn       = document.createElement('button');
+        btn.onclick     = () => setFilter(c);
         btn.dataset.cat = c;
-        btn.className = `filter-pill ${activeFilter===c?'active':''} px-3 py-1 rounded-full`;
+        btn.className   = `filter-pill ${activeFilter===c?'active':''} px-3 py-1.5 rounded-full`;
         btn.textContent = c;
         container.appendChild(btn);
       });
     }
 
     function renderItems() {
-      const list = document.getElementById('itemsList');
+      const list     = document.getElementById('itemsList');
       const filtered = activeFilter ? allItems.filter(i => i.category === activeFilter) : allItems;
 
-      document.getElementById('itemCount').textContent = `${allItems.length} item${allItems.length !== 1 ? 's' : ''}`;
+      document.getElementById('itemCount').textContent =
+        `${allItems.length} item${allItems.length !== 1 ? 's' : ''}`;
 
-      if (filtered.length === 0) {
-        list.innerHTML = `<div id="emptyState" class="text-center py-16 text-muted">
-          <div class="font-display text-6xl mb-3 opacity-20">✦</div>
-          <p class="text-sm">${allItems.length > 0 ? 'No items in this category' : 'Your wishlist is empty'}</p>
-        </div>`;
+      if (!filtered.length) {
+        list.innerHTML = `
+          <div class="text-center py-16" style="color:var(--muted)">
+            <div class="font-display text-6xl mb-3 opacity-20">✦</div>
+            <p class="text-sm">${allItems.length ? 'No items in this category' : 'Your wishlist is empty'}</p>
+            ${!allItems.length ? '<p class="text-xs mt-1 opacity-60">Tap Add Item to get started</p>' : ''}
+          </div>`;
         return;
       }
 
@@ -570,17 +685,33 @@
         <div class="item-card rounded-2xl p-4 slide-in">
           <div class="flex items-start justify-between gap-3">
             <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 flex-wrap mb-1">
-                ${item.category ? `<span class="tag px-2 py-0.5 rounded-full">${item.category}</span>` : ''}
-              </div>
+              ${item.category
+                ? `<span class="tag px-2 py-0.5 rounded-full inline-block mb-1.5">${escHtml(item.category)}</span>`
+                : ''}
               <h3 class="font-display text-base leading-snug">${escHtml(item.name)}</h3>
-              ${item.price ? `<p class="text-accent text-sm font-medium mt-1">${escHtml(item.currency)} ${escHtml(item.price)}</p>` : ''}
-              ${item.notes ? `<p class="text-muted text-xs mt-1.5 leading-relaxed">${escHtml(item.notes)}</p>` : ''}
-              ${item.url ? `<a href="${escHtml(item.url)}" target="_blank" rel="noopener" class="text-xs text-muted hover:text-accent mt-2 inline-block truncate max-w-xs transition-colors">↗ View product</a>` : ''}
+              ${item.price
+                ? `<p class="text-sm font-medium mt-1" style="color:var(--accent)">${escHtml(item.currency)} ${escHtml(item.price)}</p>`
+                : ''}
+              ${item.notes
+                ? `<p class="text-xs mt-1.5 leading-relaxed" style="color:var(--muted)">${escHtml(item.notes)}</p>`
+                : ''}
+              ${item.url
+                ? `<a href="${escHtml(item.url)}" target="_blank" rel="noopener"
+                     class="text-xs mt-2 inline-block truncate max-w-xs transition-colors"
+                     style="color:var(--muted)"
+                     onmouseover="this.style.color='var(--accent)'"
+                     onmouseout="this.style.color='var(--muted)'">↗ View product</a>`
+                : ''}
             </div>
-            <div class="flex flex-col items-end gap-2 shrink-0">
-              <button onclick='editItem(${JSON.stringify(item.id)})' class="text-muted hover:text-paper transition-colors text-xs">Edit</button>
-              <button onclick='deleteItem(${JSON.stringify(item.id)})' class="text-muted hover:text-red-400 transition-colors text-xs">Delete</button>
+            <div class="flex flex-col items-end gap-2 shrink-0 pt-0.5">
+              <button onclick='editItem(${JSON.stringify(item.id)})'
+                class="text-xs transition-colors" style="color:var(--muted)"
+                onmouseover="this.style.color='var(--paper)'"
+                onmouseout="this.style.color='var(--muted)'">Edit</button>
+              <button onclick='deleteItem(${JSON.stringify(item.id)})'
+                class="text-xs transition-colors" style="color:var(--muted)"
+                onmouseover="this.style.color='#f87171'"
+                onmouseout="this.style.color='var(--muted)'">Delete</button>
             </div>
           </div>
         </div>
@@ -589,8 +720,7 @@
 
     window.editItem = (id) => {
       const item = allItems.find(i => i.id === id);
-      if (!item) return;
-      openModal({ ...item, editId: id });
+      if (item) openModal({ ...item, editId: id });
     };
 
     window.deleteItem = async (id) => {
@@ -600,22 +730,24 @@
       loadItems();
     };
 
-    // ─── Helpers ─────────────────────────────────────────────────────────────
+    // ─── Helpers ──────────────────────────────────────────────────────────────
     function escHtml(str) {
-      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      return String(str||'')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
     let toastTimer;
     window.showToast = (msg, isError = false) => {
-      const el = document.getElementById('toast');
-      el.textContent = msg;
-      el.style.background = isError ? '#ef4444' : '#f5f0eb';
-      el.style.color       = isError ? '#fff' : '#0a0a0a';
-      el.style.opacity     = '1';
-      el.style.transform   = 'translateX(-50%) translateY(0)';
+      const el         = document.getElementById('toast');
+      el.textContent   = msg;
+      el.style.background = isError ? '#ef4444' : 'var(--accent)';
+      el.style.color      = 'var(--bg)';
+      el.style.opacity    = '1';
+      el.style.transform  = 'translateX(-50%) translateY(0)';
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => {
-        el.style.opacity = '0';
+        el.style.opacity   = '0';
         el.style.transform = 'translateX(-50%) translateY(8px)';
       }, 2500);
     };
@@ -635,39 +767,38 @@
 
 1. FIREBASE SETUP
    a) Go to https://console.firebase.google.com
-   b) Create a new project
-   c) Add a Web App (</> icon) → copy the firebaseConfig object
-   d) Paste the values into the FIREBASE_CONFIG object near the top of the <script> tag
-   e) In Firebase Console → Authentication → Sign-in method → Enable Email/Password
-   f) In Firebase Console → Firestore Database → Create database (start in production mode)
-   g) Set these Firestore Security Rules:
+   b) Create a project → Add web app → copy firebaseConfig
+   c) Paste values into FIREBASE_CONFIG in the <script> tag
+   d) Authentication → Sign-in method → enable Email/Password
+   e) Firestore → Create database (production mode)
+   f) Set Firestore Security Rules:
 
       rules_version = '2';
       service cloud.firestore {
         match /databases/{database}/documents {
           match /items/{itemId} {
-            allow read, write: if request.auth != null && request.auth.uid == resource.data.uid;
-            allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+            allow read, write: if request.auth != null
+              && request.auth.uid == resource.data.uid;
+            allow create: if request.auth != null
+              && request.resource.data.uid == request.auth.uid;
           }
         }
       }
 
-2. GITHUB PAGES HOSTING
-   a) Create a GitHub repo (e.g. my-wishlist)
-   b) Upload index.html, manifest.json, sw.js
-   c) Add a 192×192 PNG as icon-192.png and 512×512 as icon-512.png
-   d) Go to repo Settings → Pages → Source: main branch / root
-   e) Your app will be at https://yourusername.github.io/my-wishlist/
+2. GITHUB PAGES
+   a) Upload: index.html, manifest.json, sw.js, icon-192.png, icon-512.png
+   b) Repo Settings → Pages → Source: main / root
+   c) Live at: https://yourusername.github.io/your-repo/
 
-3. HOW ENCRYPTION WORKS
-   - Your master password is NEVER sent anywhere
-   - It's used with PBKDF2 (200k iterations) + your Firebase UID as salt to derive an AES-256-GCM key
-   - Only "Name" and "URL" fields are encrypted (price/category stay plaintext for filtering)
-   - If you forget your master password, your encrypted data cannot be recovered
+3. ENCRYPTION
+   - Master password never leaves your device
+   - PBKDF2 (200k iterations) + Firebase UID → AES-256-GCM key
+   - Name & URL encrypted; price/category plaintext (needed for filtering)
+   - Forgotten master password = data permanently unrecoverable
 
-4. ALLORIGINS PROXY
-   - URL fetching uses https://api.allorigins.win (free, no key needed)
-   - It may not work for all sites (some block scrapers)
-   - Manual entry always works as a fallback
+4. CUSTOM CATEGORIES
+   - Choose "+ Custom category…" in the dropdown
+   - Type any name and click Add (or press Enter)
+   - Saved to Firestore with each item; re-populated automatically on next login
 ═══════════════════════════════════════════════════════════════
 -->
