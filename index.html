@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Wishlist</title>
 
-  <!-- PWA / iOS -->
+   <!-- PWA / iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Wishlist" />
@@ -17,7 +17,7 @@
   <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="shortcut icon" href="/favicon.ico" />
-
+	
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -235,15 +235,10 @@
         <input id="authEmail"    type="email"    placeholder="Email"    class="w-full rounded-xl px-4 py-3 text-sm" />
         <input id="authPassword" type="password" placeholder="Password" class="w-full rounded-xl px-4 py-3 text-sm" />
 
-        <div class="space-y-2">
-          <input id="masterPassword" type="password"
-            placeholder="Master Password (for encryption)"
-            class="w-full rounded-xl px-4 py-3 text-sm" />
-          <p class="text-xs leading-relaxed" style="color:var(--muted)">
-            Encrypts your data client-side.
-            <strong style="color:var(--paper)">Never</strong> stored — keep it safe.
-          </p>
-        </div>
+        <p class="text-xs leading-relaxed px-1" style="color:var(--muted)">
+          🔒 Your password also encrypts your data client-side and is
+          <strong style="color:var(--paper)">never</strong> stored or sent to anyone.
+        </p>
 
         <button id="authBtn" onclick="handleAuth()"
           class="btn-primary w-full rounded-xl py-3 text-sm flex items-center justify-center gap-2">
@@ -253,7 +248,7 @@
 
       <p class="text-xs text-center mt-6 leading-relaxed" style="color:var(--muted)">
         ⚙️ Paste your Firebase config in the
-        <code style="color:var(--accent)">FIREBASE_CONFIG</code> section below
+        <code style="color:var(--accent)">FIREBASE_CONFIG</code> section in the file
       </p>
     </div>
   </div>
@@ -374,7 +369,7 @@
     // 3. Replace the placeholder values below
     // 4. Enable Email/Password auth + Firestore in the Firebase console
 
-   	const FIREBASE_CONFIG = {
+    const FIREBASE_CONFIG = {
 		apiKey: "AIzaSyBSzSThI6G_CAMUeBay_SuEXGtFt4wSsmg",
 		authDomain: "wishlist-71248.firebaseapp.com",
 		projectId: "wishlist-71248",
@@ -454,14 +449,13 @@
     window.handleAuth = async () => {
       const email  = document.getElementById('authEmail').value.trim();
       const pw     = document.getElementById('authPassword').value;
-      const master = document.getElementById('masterPassword').value;
       const errEl  = document.getElementById('authError');
       const btn    = document.getElementById('authBtn');
       const isLogin = btn.textContent.trim() === 'Sign In';
 
       errEl.classList.add('hidden');
-      if (!master) {
-        errEl.textContent = 'Master password is required.';
+      if (!pw) {
+        errEl.textContent = 'Password is required.';
         errEl.classList.remove('hidden');
         return;
       }
@@ -473,7 +467,8 @@
         const cred = isLogin
           ? await signInWithEmailAndPassword(auth, email, pw)
           : await createUserWithEmailAndPassword(auth, email, pw);
-        cryptoKey = await deriveKey(master, cred.user.uid);
+        // Use the login password itself as the encryption key source
+        cryptoKey = await deriveKey(pw, cred.user.uid);
       } catch (e) {
         errEl.textContent = e.message.replace('Firebase: ','').replace(/\(auth\/.*?\)\.?/,'').trim();
         errEl.classList.remove('hidden');
@@ -796,10 +791,12 @@
    c) Live at: https://yourusername.github.io/your-repo/
 
 3. ENCRYPTION
-   - Master password never leaves your device
-   - PBKDF2 (200k iterations) + Firebase UID → AES-256-GCM key
-   - Name & URL encrypted; price/category plaintext (needed for filtering)
-   - Forgotten master password = data permanently unrecoverable
+   - Your login password doubles as the encryption key source
+   - PBKDF2 (200k iterations, salted with your Firebase UID) → AES-256-GCM key
+   - The password is never stored or sent — only used locally to derive the key
+   - Name & URL are encrypted; price/category stay plaintext (needed for filtering)
+   - One password to remember — if you change/reset it, existing encrypted data
+     will become unreadable (re-encrypt by editing and re-saving each item)
 
 4. CUSTOM CATEGORIES
    - Choose "+ Custom category…" in the dropdown
